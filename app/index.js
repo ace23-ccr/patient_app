@@ -5,112 +5,81 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView
 } from "react-native";
-import { useRouter } from "expo-router";   // ✅ ADD THIS
+import { useRouter } from "expo-router";
 
 export default function Index() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const router = useRouter();   // ✅ ADD THIS
+  const router = useRouter();
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Welcome</Text>
-      <Text style={styles.subtitle}>
-        Login to access your medical records
-      </Text>
+    <KeyboardAvoidingView 
+      behavior={Platform.OS === "ios" ? "padding" : "height"} 
+      style={styles.container}
+    >
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        {/* Logo */}
+        <Image
+          source={require('../assets/applogo.jpg')} 
+          style={styles.logo}
+          resizeMode="contain"
+        />
 
-      <TextInput
-        placeholder="Email"
-        style={styles.input}
-        value={email}
-        onChangeText={setEmail}
-      />
+        <Text style={styles.title}>Welcome </Text>
+        <Text style={styles.subtitle}>Login to access your medical records</Text>
 
-      <TextInput
-        placeholder="Password"
-        style={styles.input}
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
+        {/* Input Fields */}
+        <TextInput
+          placeholder="Email"
+          style={styles.input}
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+          keyboardType="email-address"
+        />
+        <TextInput
+          placeholder="Password"
+          style={styles.input}
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+        />
 
-      {/* Login Button */}
-<TouchableOpacity 
-  style={styles.button}
-  onPress={() => router.push("/medical")}
->
-  <Text style={styles.buttonText}>Login</Text>
-</TouchableOpacity>
-
-{/* Upload Button */}
-<TouchableOpacity 
-  style={styles.uploadButton}
-  onPress={() => router.push("/upload")} 
->
-
-</TouchableOpacity>
-
-      {/* Sign Up Option */}
-      <View style={styles.signupContainer}>
-        <Text style={styles.signupText}>Don’t have an account? </Text>
-        <TouchableOpacity>
-          <Text style={styles.signupLink}>Sign Up</Text>
+        {/* Login Button */}
+        <TouchableOpacity 
+          style={styles.button}
+          onPress={() => router.push("/medical")}
+        >
+          <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
-      </View>
-    </View>
+
+        {/* Sign Up Link */}
+        <View style={styles.signupContainer}>
+          <Text style={styles.signupText}>Don't have an account? </Text>
+          <TouchableOpacity onPress={() => router.push("/signup")}>
+            <Text style={styles.signupLink}>Sign Up</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 20,
-    backgroundColor: "#F3F6FB",
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: "700",
-    textAlign: "center",
-    marginBottom: 8,
-  },
-  subtitle: {
-    textAlign: "center",
-    marginBottom: 30,
-    color: "#6B7280",
-  },
-  input: {
-    height: 50,
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    paddingHorizontal: 15,
-    marginBottom: 15,
-  },
-  button: {
-    height: 50,
-    backgroundColor: "#2563EB",
-    borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 10,
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  signupContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 20,
-  },
-  signupText: {
-    color: "#6B7280",
-  },
-  signupLink: {
-    color: "#2563EB",
-    fontWeight: "600",
-  },
+  container: { flex: 1, backgroundColor: "#F3F6FB" },
+  scrollContent: { flexGrow: 1, justifyContent: "center", padding: 25, alignItems: "center" },
+  logo: { width: 140, height: 140, marginBottom: 20 },
+  title: { fontSize: 26, fontWeight: "700", color: "#1F2937", marginBottom: 8 },
+  subtitle: { textAlign: "center", marginBottom: 30, color: "#6B7280" },
+  input: { width: '100%', height: 55, backgroundColor: "#fff", borderRadius: 12, paddingHorizontal: 15, marginBottom: 15, borderWidth: 1, borderColor: "#E5E7EB" },
+  button: { width: '100%', height: 55, backgroundColor: "#0F766E", borderRadius: 12, justifyContent: "center", alignItems: "center", marginTop: 10 },
+  buttonText: { color: "#fff", fontSize: 16, fontWeight: "600" },
+  signupContainer: { flexDirection: "row", marginTop: 25 },
+  signupText: { color: "#6B7280" },
+  signupLink: { color: "#0F766E", fontWeight: "700" },
 });

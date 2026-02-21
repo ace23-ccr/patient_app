@@ -15,11 +15,14 @@ export default function LoginScreen() {   // ← must have default export!
   return (
     <View style={styles.container}>
       
-      <Image
-        source={require('../assets/applogo.jpg')}  // ← this should work now
-        style={styles.logo}
-        resizeMode="contain"
-      />
+      {/* ✅ THE LOGO SECTION */}
+      <View style={styles.logoContainer}>
+        <Image
+          source={require('../assets/applogo.jpg')} 
+          style={styles.logo}
+          resizeMode="contain" // Ensures the whole image fits without cropping
+        />
+      </View>
 
       <Text style={styles.title}>Welcome Back</Text>
       <Text style={styles.subtitle}>
@@ -38,11 +41,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 20,
     alignItems: "center",
-  },
-  logo: {
-    width: 180,
-    height: 180,
-    marginBottom: 30,
-  },
+     logo: {
+  width: 150,
+  height: 150,
+  marginBottom: 20,
+  borderWidth: 1,      // ✅ Add this temporarily
+  borderColor: 'red',  // ✅ If you see a red box but no image, the path is wrong.
+},
+}
   // ... your other styles
 });
