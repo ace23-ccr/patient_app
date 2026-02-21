@@ -49,7 +49,7 @@ export default function Index() {
   style={styles.uploadButton}
   onPress={() => router.push("/upload")} 
 >
-  <Text style={styles.uploadText}>Upload Medical Record</Text>
+
 </TouchableOpacity>
 
       {/* Sign Up Option */}

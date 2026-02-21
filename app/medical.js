@@ -1,16 +1,10 @@
 import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons"; //
-import { useRouter } from "expo-router"; // ✅ ADD THIS IMPORT
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 export default function Medical() {
-  const router = useRouter(); // ✅ Call hook here at the top level
+  const router = useRouter();
 
   return (
     <ScrollView style={styles.container}>
@@ -19,94 +13,94 @@ export default function Medical() {
         <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
-        <View>
+        <View style={styles.headerTextContainer}>
           <Text style={styles.headerTitle}>Medical Records</Text>
           <Text style={styles.headerSubtitle}>Your health history</Text>
         </View>
         <Ionicons name="share-social-outline" size={22} color="black" />
       </View>
 
-      {/* Tabs */}
-      <View style={styles.tabs}>
-        <Text style={styles.activeTab}>All (6)</Text>
-        <Text style={styles.tab}>Reports (1)</Text>
-        <Text style={styles.tab}>Lab (2)</Text>
-      </View>
-
-      {/* Report Sections - Passing router as a prop or using it directly */}
-      <View style={styles.sectionContainer}>
-        {/* We now use it as a proper Component: <ReportSection /> */}
+      {/* List of Sections - One per row */}
+      <View style={styles.listContainer}>
         <ReportSection title="Blood Report" iconName="water-outline" router={router} />
         <ReportSection title="X-Ray" iconName="scan-outline" router={router} />
         <ReportSection title="MRI" iconName="pulse-outline" router={router} />
         <ReportSection title="CT Scan" iconName="medical-outline" router={router} />
+        <ReportSection title="Prescription" iconName="clipboard-outline" router={router} />
       </View>
     </ScrollView>
   );
 }
 
-// ✅ FIXED: Capitalized to make it a Component and accepting 'router' as a prop
+// Reusable Row Component
 function ReportSection({ title, iconName, router }) {
   return (
     <TouchableOpacity 
-      style={styles.sectionCard} 
+      style={styles.rowCard} 
       onPress={() => router.push({
         pathname: "/report/[type]",
         params: { type: title } 
       })}
     >
-      <Ionicons name={iconName} size={24} color="#0F766E" />
-      <Text style={styles.sectionText}>{title}</Text>
+      <View style={styles.leftContent}>
+        <View style={styles.iconCircle}>
+          <Ionicons name={iconName} size={22} color="#0F766E" />
+        </View>
+        <Text style={styles.rowTitle}>{title}</Text>
+      </View>
+      <Ionicons name="chevron-forward" size={18} color="#9CA3AF" />
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#F3F6FB", padding: 15 },
+  container: { flex: 1, backgroundColor: "#F3F6FB", paddingHorizontal: 20 },
   header: { 
     flexDirection: "row", 
     justifyContent: "space-between", 
     alignItems: "center", 
-    marginBottom: 20, 
-    paddingTop: 40 
+    marginTop: 60, 
+    marginBottom: 30 
   },
-  headerTitle: { fontSize: 18, fontWeight: "700" },
-  headerSubtitle: { fontSize: 12, color: "#6B7280" },
-  tabs: { flexDirection: "row", marginBottom: 15 },
-  activeTab: { 
-    backgroundColor: "#0F766E", 
-    color: "#fff", 
-    paddingHorizontal: 12, 
-    paddingVertical: 6, 
-    borderRadius: 20, 
-    marginRight: 8,
-    overflow: 'hidden' 
+  headerTextContainer: { alignItems: 'center' },
+  headerTitle: { fontSize: 20, fontWeight: "700" },
+  headerSubtitle: { fontSize: 13, color: "#6B7280" },
+  
+  listContainer: {
+    flexDirection: 'column',
+    gap: 12, // Vertical spacing between rows
   },
-  tab: { 
-    backgroundColor: "#E5E7EB", 
-    paddingHorizontal: 12, 
-    paddingVertical: 6, 
-    borderRadius: 20, 
-    marginRight: 8,
-    overflow: 'hidden' 
-  },
-  sectionContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  sectionCard: {
+  rowCard: {
     backgroundColor: '#fff',
-    width: '48%',
-    padding: 20,
-    borderRadius: 12,
+    width: '100%', // Full width as requested
+    padding: 18,
+    borderRadius: 16,
+    flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
-    elevation: 2,
-    shadowColor: '#000',
+    justifyContent: 'space-between',
+    // Subtle shadow for depth
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowOpacity: 0.05,
+    shadowRadius: 5,
+    elevation: 2,
   },
-  sectionText: { marginTop: 8, fontWeight: '600', color: '#374151' }
+  leftContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconCircle: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#E5F4F3',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 15,
+  },
+  rowTitle: { 
+    fontSize: 16, 
+    fontWeight: '600', 
+    color: '#374151' 
+  }
 });
