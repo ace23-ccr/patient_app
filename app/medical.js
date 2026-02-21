@@ -6,14 +6,17 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons"; //
+import { useRouter } from "expo-router"; // ✅ ADD THIS IMPORT
 
 export default function Medical() {
+  const router = useRouter(); // ✅ Call hook here at the top level
+
   return (
     <ScrollView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
         <View>
@@ -30,21 +33,28 @@ export default function Medical() {
         <Text style={styles.tab}>Lab (2)</Text>
       </View>
 
-      {/* Report Sections - Now calling the defined function below */}
+      {/* Report Sections - Passing router as a prop or using it directly */}
       <View style={styles.sectionContainer}>
-        {reportSection("Blood Report", "water-outline")}
-        {reportSection("X-Ray", "scan-outline")}
-        {reportSection("MRI", "pulse-outline")}
-        {reportSection("CT Scan", "medical-outline")}
+        {/* We now use it as a proper Component: <ReportSection /> */}
+        <ReportSection title="Blood Report" iconName="water-outline" router={router} />
+        <ReportSection title="X-Ray" iconName="scan-outline" router={router} />
+        <ReportSection title="MRI" iconName="pulse-outline" router={router} />
+        <ReportSection title="CT Scan" iconName="medical-outline" router={router} />
       </View>
     </ScrollView>
   );
 }
 
-// ✅ FIXED: Defined the missing helper function
-function reportSection(title, iconName) {
+// ✅ FIXED: Capitalized to make it a Component and accepting 'router' as a prop
+function ReportSection({ title, iconName, router }) {
   return (
-    <TouchableOpacity style={styles.sectionCard}>
+    <TouchableOpacity 
+      style={styles.sectionCard} 
+      onPress={() => router.push({
+        pathname: "/report/[type]",
+        params: { type: title } 
+      })}
+    >
       <Ionicons name={iconName} size={24} color="#0F766E" />
       <Text style={styles.sectionText}>{title}</Text>
     </TouchableOpacity>
@@ -53,14 +63,33 @@ function reportSection(title, iconName) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#F3F6FB", padding: 15 },
-  header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 20, paddingTop: 40 },
+  header: { 
+    flexDirection: "row", 
+    justifyContent: "space-between", 
+    alignItems: "center", 
+    marginBottom: 20, 
+    paddingTop: 40 
+  },
   headerTitle: { fontSize: 18, fontWeight: "700" },
   headerSubtitle: { fontSize: 12, color: "#6B7280" },
   tabs: { flexDirection: "row", marginBottom: 15 },
-  activeTab: { backgroundColor: "#0F766E", color: "#fff", paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, marginRight: 8 },
-  tab: { backgroundColor: "#E5E7EB", paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, marginRight: 8 },
-  
-  // ✅ FIXED: Added missing styles for the sections
+  activeTab: { 
+    backgroundColor: "#0F766E", 
+    color: "#fff", 
+    paddingHorizontal: 12, 
+    paddingVertical: 6, 
+    borderRadius: 20, 
+    marginRight: 8,
+    overflow: 'hidden' 
+  },
+  tab: { 
+    backgroundColor: "#E5E7EB", 
+    paddingHorizontal: 12, 
+    paddingVertical: 6, 
+    borderRadius: 20, 
+    marginRight: 8,
+    overflow: 'hidden' 
+  },
   sectionContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
